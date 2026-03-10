@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/isl/:path*",
+            "destination": "https://dvlprcc-isl.vercel.app/:path*"
+        }
+    ]
+}
