@@ -54,8 +54,9 @@
     }
 
     .info h1 .link-tag {
-      background: #111;
-      color: #fff;
+      background: #c2ff1f;
+      color: #111;
+
       padding: 1px 7px;
       text-decoration: underline;
       text-underline-offset: 4px;
@@ -66,8 +67,8 @@
     }
 
     .info h1 .link-tag:hover {
-      background: #c2ff1f;
-      color: #111;
+      background: #111;
+      color: #fff;
     }
 
     .socials {
@@ -324,10 +325,9 @@
       <span class="name-tag">Dvlpr.cc</span> —<br>
       We build things,<br>
       then figure out &amp;<br>
-      <a class="link-tag" href="/">Why&nbsp;they&nbsp;matter.</a>
+      <span class="link-tag">Why&nbsp;they&nbsp;matter.</span>
     </h1>
     <div class="socials">
-      <!-- <a href="https://linkedin.com/in/krishna-tpm" target="_blank"><i class="ph ph-linkedin-logo"></i> LinkedIn</a> -->
       <a href="https://github.com/DvlprHQ" target="_blank"><i class="ph ph-github-logo"></i> GitHub</a>
       <a href="https://twitter.com/DvlprHQ" target="_blank"><i class="ph ph-x-logo"></i> X.com</a>
       <a href="mailto:hello@Dvlprstudio.com"><i class="ph ph-envelope-simple"></i> Email</a>
@@ -347,11 +347,11 @@
 
   <script>
     const projects = [
-      { icon: 'chart-line-up', desc: 'Focused task management built for deep work and flow states', name: 'Setopos', year: '2025', href: 'work/setopos/', color: '#c2ff1f', rot: -9, x: .58, y: .10 },
-      { icon: 'books', desc: 'Modern management frameworks & leadership resources for teams', name: 'Management Explained', year: '2026', href: 'work/management-explained/', color: '#c2ff1f', rot: 4, x: .72, y: .04 },
-      { icon: 'compass', desc: 'A guided decision framework for product managers navigating ambiguity', name: 'PM Pathfinder', year: '2025', href: 'work/pm-pathfinder/', color: '#ffd166', rot: 13, x: .82, y: .22 },
-      { icon: 'megaphone-simple', desc: 'Honest editorial critique of startup pitches and pitch decks', name: 'SharkTank Rocks', year: '2024', href: 'work/sharktank-rocks/', color: '#ff8fab', rot: -5, x: .62, y: .50 },
-      { icon: 'translate', desc: 'A Satirical tool to map indian startup losses', name: 'Indian Startup Losses', year: '2026', href: 'Dvlpr.cc/isl', color: '#c2ff1f', rot: -15, x: .36, y: .52 },
+      { icon: 'chart-line-up', desc: 'Focused POS management built for new age cafes and coffee shops', name: 'Setopos', year: '2026', href: 'https://www.setopos.com/', color: '#c2ff1f', rot: -9, x: .58, y: .10 },
+      { icon: 'books', desc: 'Modern management frameworks & leadership resources for teams', name: 'Management Explained', year: '2026', href: 'https://management-explained.vercel.app/', color: '#c2ff1f', rot: 4, x: .72, y: .04 },
+      { icon: 'compass', desc: 'A guided decision framework for product managers navigating ambiguity', name: 'PM Pathfinder', year: '2026', href: 'https://pmpathfinder.com/', color: '#ffd166', rot: 13, x: .82, y: .22 },
+      { icon: 'megaphone-simple', desc: 'Honest editorial critique of startup pitches and pitch decks', name: 'SharkTank Rocks', year: '2026', href: 'https://sharktank.rocks/', color: '#ff8fab', rot: -5, x: .62, y: .50 },
+      { icon: 'translate', desc: 'A Satirical tool to map indian startup losses', name: 'Indian Startup Losses', year: '2026', href: 'https://dvlprcc-isl.vercel.app/', color: '#c2ff1f', rot: -15, x: .36, y: .52 },
     ];
 
     const isMobile = () => window.innerWidth <= 768;
@@ -368,6 +368,8 @@
         const card = document.createElement('a');
         card.className = 'card';
         card.href = p.href;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
 
         const iw = window.innerWidth, ih = window.innerHeight;
         card.style.left = (iw * p.x) + 'px';
@@ -402,14 +404,10 @@
         // ── DRAG with rubber-band resistance ──
         let dragging = false, ox = 0, oy = 0, startX = 0, startY = 0;
 
-        // Rubber-band: compress movement beyond edge, spring back on release
-        // maxOvershoot = how many px the card can be dragged past the boundary
         const maxOvershoot = 80;
 
         function rubber(raw, min, max) {
-          // Inside bounds — no resistance
           if (raw >= min && raw <= max) return raw;
-          // Outside — apply sqrt damping
           if (raw < min) {
             const over = min - raw;
             return min - maxOvershoot * (1 - Math.exp(-over / maxOvershoot));
@@ -432,7 +430,6 @@
         window.addEventListener('mousemove', e => {
           if (!dragging) return;
           const cardW = card.offsetWidth, cardH = card.offsetHeight;
-          // Tighter boundary — card must stay mostly on screen (only 30px can hide)
           const minL = -(cardW - 30), maxL = window.innerWidth - 30;
           const minT = -(cardH - 30), maxT = window.innerHeight - 30;
 
@@ -448,7 +445,6 @@
           if (!dragging) return;
           dragging = false; card._drag = false;
 
-          // Clamp back fully into bounds with a spring transition
           const cardW = card.offsetWidth, cardH = card.offsetHeight;
           const curL = parseFloat(card.style.left);
           const curT = parseFloat(card.style.top);
@@ -457,7 +453,6 @@
           const snapL = Math.min(Math.max(curL, minL), maxL);
           const snapT = Math.min(Math.max(curT, minT), maxT);
 
-          // Apply spring-back only if we overshot
           if (snapL !== curL || snapT !== curT) {
             card.style.transition = 'left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.18s';
             card.style.left = snapL + 'px';
@@ -494,13 +489,14 @@
       const dotsEl = document.getElementById('mobileDots');
       track.innerHTML = ''; dotsEl.innerHTML = '';
 
-      // Small rotations for character — alternating
       const rots = [-3, 2, -4, 3, -2, 4, -3];
 
       projects.forEach((p, idx) => {
         const card = document.createElement('a');
         card.className = 'mobile-card';
         card.href = p.href;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
         card.style.transform = `rotate(${rots[idx % rots.length]}deg)`;
         card.innerHTML = `
       <div class="card-icon"><i class="ph ph-${p.icon}"></i></div>
@@ -509,7 +505,6 @@
       <div class="card-year">${p.year}</div>
     `;
 
-        // Tap colour flash
         card.addEventListener('touchstart', () => {
           card.style.background = p.color;
           card.style.borderColor = p.color;
@@ -523,18 +518,15 @@
 
         track.appendChild(card);
 
-        // Dot
         const dot = document.createElement('div');
         dot.className = 'mobile-dot' + (idx === 0 ? ' active' : '');
         dotsEl.appendChild(dot);
       });
 
-      // Update active dot on scroll
       const dots = dotsEl.querySelectorAll('.mobile-dot');
       const cards = track.querySelectorAll('.mobile-card');
 
       track.addEventListener('scroll', () => {
-        // Find which card is most centred
         const trackMid = track.scrollLeft + track.clientWidth / 2;
         let closest = 0, minDist = Infinity;
         cards.forEach((c, i) => {
@@ -546,7 +538,6 @@
       }, { passive: true });
     }
 
-    // ── Init correct mode, re-init on resize crossing breakpoint ──
     let wasDesktop = !isMobile();
     isMobile() ? initMobile() : initDesktop();
 
