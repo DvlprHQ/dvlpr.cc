@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Dvlpr.cc</title>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #e8e8e8;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── INFO BLOCK ─── */
+    .info {
+      position: fixed;
+      left: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9000;
+      max-width: 500px;
+      pointer-events: none;
+    }
+
+    .info h1 {
+      font-size: clamp(1.7rem, 3.4vw, 3rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: #111;
+      margin-bottom: 32px;
+    }
+
+    .info h1 .name-tag {
+      background: #111;
+      color: #fff;
+      padding: 1px 7px;
+      border-radius: 2px;
+    }
+
+    .info h1 .link-tag {
+      background: #111;
+      color: #fff;
+      padding: 1px 7px;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      cursor: pointer;
+      pointer-events: all;
+      transition: background 0.15s, color 0.15s;
+      border-radius: 2px;
+    }
+
+    .info h1 .link-tag:hover {
+      background: #c2ff1f;
+      color: #111;
+    }
+
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 24px;
+      pointer-events: all;
+    }
+
+    .socials a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #111;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+
+    .socials a:hover {
+      opacity: 0.45;
+    }
+
+    .socials a i {
+      font-size: 20px;
+    }
+
+    /* ── FOOTER ─── */
+    footer {
+      position: fixed;
+      bottom: 22px;
+      left: 48px;
+      right: 48px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 9000;
+      font-size: 13px;
+      color: #555;
+      pointer-events: none;
+    }
+
+    footer a {
+      color: #111;
+      text-decoration: underline;
+      pointer-events: all;
+    }
+
+    /* ── DESKTOP: scattered draggable cards ─── */
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+    }
+
+    .card {
+      position: absolute;
+      width: 270px;
+      background: #fff;
+      border: 1.5px solid #ccc;
+      border-radius: 18px;
+      padding: 22px 22px 18px;
+      cursor: grab;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      will-change: transform;
+      transition: box-shadow 0.18s, background 0.18s, border-color 0.18s;
+      text-decoration: none;
+      color: inherit;
+      user-select: none;
+    }
+
+    @keyframes cardScatter {
+      0% {
+        opacity: 0;
+        transform: rotate(0deg) scale(0.6);
+      }
+
+      60% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .card.scatter {
+      animation: cardScatter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .card:active {
+      cursor: grabbing;
+    }
+
+    .card:hover {
+      box-shadow: 0 14px 44px rgba(0, 0, 0, .16);
+    }
+
+    .card-icon {
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: #333;
+    }
+
+    .card-desc {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #111;
+      flex: 1;
+    }
+
+    .card.active .card-desc {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .card-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: #666;
+      margin-top: 6px;
+    }
+
+    .card-year {
+      font-size: 15px;
+      font-weight: 500;
+      color: #aaa;
+    }
+
+    /* ── MOBILE: horizontal snap scroll ─── */
+    @media (max-width: 768px) {
+
+      /* Hide desktop scattered scene entirely */
+      .scene {
+        display: none;
+      }
+
+      .info {
+        left: 24px;
+        right: 24px;
+        top: 44px;
+        transform: none;
+        max-width: 100%;
+      }
+
+      .info h1 {
+        font-size: clamp(1.5rem, 6.5vw, 2rem);
+        margin-bottom: 18px;
+      }
+
+      .socials {
+        gap: 5px 16px;
+      }
+
+      .socials a {
+        font-size: 14px;
+      }
+
+      footer {
+        left: 24px;
+        right: 24px;
+        bottom: 14px;
+        font-size: 12px;
+      }
+
+      /* Scroll track — sits below hero, above footer */
+      .mobile-scroll {
+        position: fixed;
+        bottom: 52px;
+        left: 0;
+        right: 0;
+        /* height fills space between hero and footer */
+        top: 260px;
+        z-index: 8000;
+        display: flex;
+        align-items: center;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 16px;
+        padding: 0 24px;
+        /* fade edges to hint more cards */
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      }
+
+      .mobile-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .mobile-card {
+        flex: 0 0 72vw;
+        max-width: 300px;
+        scroll-snap-align: center;
+        background: #fff;
+        border: 1.5px solid #ccc;
+        border-radius: 18px;
+        padding: 22px 20px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        text-decoration: none;
+        color: inherit;
+        /* slight rotation per card for character */
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.2s, background 0.2s, border-color 0.2s;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+      }
+
+      .mobile-card:active {
+        transform: scale(0.97) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* dot indicators */
+      .mobile-dots {
+        position: fixed;
+        bottom: 36px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        z-index: 8001;
+        pointer-events: none;
+      }
+
+      .mobile-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #bbb;
+        transition: background 0.2s, transform 0.2s;
+      }
+
+      .mobile-dot.active {
+        background: #111;
+        transform: scale(1.3);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="info">
+    <h1>
+      <span class="name-tag">Dvlpr.cc</span> —<br>
+      We build things,<br>
+      then figure out &amp;<br>
+      <a class="link-tag" href="/">Why&nbsp;they&nbsp;matter.</a>
+    </h1>
+    <div class="socials">
+      <!-- <a href="https://linkedin.com/in/krishna-tpm" target="_blank"><i class="ph ph-linkedin-logo"></i> LinkedIn</a> -->
+      <a href="https://github.com/DvlprHQ" target="_blank"><i class="ph ph-github-logo"></i> GitHub</a>
+      <a href="https://twitter.com/DvlprHQ" target="_blank"><i class="ph ph-x-logo"></i> X.com</a>
+      <a href="mailto:hello@Dvlprstudio.com"><i class="ph ph-envelope-simple"></i> Email</a>
+    </div>
+  </div>
+
+  <div class="scene" id="scene"></div>
+
+  <!-- Mobile only — hidden on desktop via CSS -->
+  <div class="mobile-scroll" id="mobileScroll"></div>
+  <div class="mobile-dots" id="mobileDots"></div>
+
+  <footer>
+    <span>Dvlpr.cc © 2026</span>
+    <span>Founder, <a href="https://dvlprstudio.com" target="_blank">DvlprStudio</a></span>
+  </footer>
+
+  <script>
+    const projects = [
+      { icon: 'chart-line-up', desc: 'Focused task management built for deep work and flow states', name: 'Setopos', year: '2025', href: 'work/setopos/', color: '#c2ff1f', rot: -9, x: .58, y: .10 },
+      { icon: 'books', desc: 'Modern management frameworks & leadership resources for teams', name: 'Management Explained', year: '2026', href: 'work/management-explained/', color: '#c2ff1f', rot: 4, x: .72, y: .04 },
+      { icon: 'compass', desc: 'A guided decision framework for product managers navigating ambiguity', name: 'PM Pathfinder', year: '2025', href: 'work/pm-pathfinder/', color: '#ffd166', rot: 13, x: .82, y: .22 },
+      { icon: 'megaphone-simple', desc: 'Honest editorial critique of startup pitches and pitch decks', name: 'SharkTank Rocks', year: '2024', href: 'work/sharktank-rocks/', color: '#ff8fab', rot: -5, x: .62, y: .50 },
+      { icon: 'translate', desc: 'A Satirical tool to map indian startup losses', name: 'Indian Startup Losses', year: '2026', href: 'Dvlpr.cc/isl', color: '#c2ff1f', rot: -15, x: .36, y: .52 },
+    ];
+
+    const isMobile = () => window.innerWidth <= 768;
+
+    // ═══════════════════════════════════════════
+    // DESKTOP — scattered draggable cards
+    // ═══════════════════════════════════════════
+    function initDesktop() {
+      const scene = document.getElementById('scene');
+      scene.style.display = '';
+      let topZ = 1000;
+
+      projects.forEach((p, idx) => {
+        const card = document.createElement('a');
+        card.className = 'card';
+        card.href = p.href;
+
+        const iw = window.innerWidth, ih = window.innerHeight;
+        card.style.left = (iw * p.x) + 'px';
+        card.style.top = (ih * p.y) + 'px';
+        card.style.transform = `rotate(${p.rot}deg)`;
+        card.style.zIndex = 1000 + idx + 1;
+
+        card.innerHTML = `
+      <div class="card-icon"><i class="ph ph-${p.icon}"></i></div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-year">${p.year}</div>
+    `;
+
+        // Scatter in staggered
+        setTimeout(() => { card.classList.add('scatter'); }, idx * 60);
+        card.addEventListener('animationend', () => { card.classList.remove('scatter'); }, { once: true });
+
+        // Hover colour
+        card.addEventListener('mouseenter', () => {
+          card.classList.add('active');
+          card.style.background = p.color;
+          card.style.borderColor = p.color;
+        });
+        card.addEventListener('mouseleave', () => {
+          if (card._drag) return;
+          card.classList.remove('active');
+          card.style.background = '#fff';
+          card.style.borderColor = '#ccc';
+        });
+
+        // ── DRAG with rubber-band resistance ──
+        let dragging = false, ox = 0, oy = 0, startX = 0, startY = 0;
+
+        // Rubber-band: compress movement beyond edge, spring back on release
+        // maxOvershoot = how many px the card can be dragged past the boundary
+        const maxOvershoot = 80;
+
+        function rubber(raw, min, max) {
+          // Inside bounds — no resistance
+          if (raw >= min && raw <= max) return raw;
+          // Outside — apply sqrt damping
+          if (raw < min) {
+            const over = min - raw;
+            return min - maxOvershoot * (1 - Math.exp(-over / maxOvershoot));
+          } else {
+            const over = raw - max;
+            return max + maxOvershoot * (1 - Math.exp(-over / maxOvershoot));
+          }
+        }
+
+        card.addEventListener('mousedown', e => {
+          e.preventDefault();
+          dragging = true; card._drag = true;
+          topZ++; card.style.zIndex = topZ;
+          card.style.transition = 'box-shadow 0.18s';
+          const rect = card.getBoundingClientRect();
+          ox = rect.left; oy = rect.top;
+          startX = e.clientX; startY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', e => {
+          if (!dragging) return;
+          const cardW = card.offsetWidth, cardH = card.offsetHeight;
+          // Tighter boundary — card must stay mostly on screen (only 30px can hide)
+          const minL = -(cardW - 30), maxL = window.innerWidth - 30;
+          const minT = -(cardH - 30), maxT = window.innerHeight - 30;
+
+          const rawL = ox + (e.clientX - startX);
+          const rawT = oy + (e.clientY - startY);
+
+          card.style.left = rubber(rawL, minL, maxL) + 'px';
+          card.style.top = rubber(rawT, minT, maxT) + 'px';
+          card.style.transform = `rotate(${p.rot}deg) scale(1.03)`;
+        });
+
+        window.addEventListener('mouseup', e => {
+          if (!dragging) return;
+          dragging = false; card._drag = false;
+
+          // Clamp back fully into bounds with a spring transition
+          const cardW = card.offsetWidth, cardH = card.offsetHeight;
+          const curL = parseFloat(card.style.left);
+          const curT = parseFloat(card.style.top);
+          const minL = -(cardW - 30), maxL = window.innerWidth - 30;
+          const minT = -(cardH - 30), maxT = window.innerHeight - 30;
+          const snapL = Math.min(Math.max(curL, minL), maxL);
+          const snapT = Math.min(Math.max(curT, minT), maxT);
+
+          // Apply spring-back only if we overshot
+          if (snapL !== curL || snapT !== curT) {
+            card.style.transition = 'left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.18s';
+            card.style.left = snapL + 'px';
+            card.style.top = snapT + 'px';
+          } else {
+            card.style.transition = 'box-shadow 0.18s, background 0.18s, border-color 0.18s';
+          }
+
+          card.style.transform = `rotate(${p.rot}deg)`;
+
+          const rect = card.getBoundingClientRect();
+          const inside = e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom;
+          if (!inside) {
+            card.classList.remove('active');
+            card.style.background = '#fff';
+            card.style.borderColor = '#ccc';
+          }
+        });
+
+        card.addEventListener('click', e => {
+          if (Math.abs(e.clientX - startX) > 6 || Math.abs(e.clientY - startY) > 6) e.preventDefault();
+        });
+
+        scene.appendChild(card);
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    // MOBILE — horizontal snap scroll
+    // ═══════════════════════════════════════════
+    function initMobile() {
+      const track = document.getElementById('mobileScroll');
+      const dotsEl = document.getElementById('mobileDots');
+      track.innerHTML = ''; dotsEl.innerHTML = '';
+
+      // Small rotations for character — alternating
+      const rots = [-3, 2, -4, 3, -2, 4, -3];
+
+      projects.forEach((p, idx) => {
+        const card = document.createElement('a');
+        card.className = 'mobile-card';
+        card.href = p.href;
+        card.style.transform = `rotate(${rots[idx % rots.length]}deg)`;
+        card.innerHTML = `
+      <div class="card-icon"><i class="ph ph-${p.icon}"></i></div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-name">${p.name}</div>
+      <div class="card-year">${p.year}</div>
+    `;
+
+        // Tap colour flash
+        card.addEventListener('touchstart', () => {
+          card.style.background = p.color;
+          card.style.borderColor = p.color;
+        }, { passive: true });
+        card.addEventListener('touchend', () => {
+          setTimeout(() => {
+            card.style.background = '#fff';
+            card.style.borderColor = '#ccc';
+          }, 180);
+        });
+
+        track.appendChild(card);
+
+        // Dot
+        const dot = document.createElement('div');
+        dot.className = 'mobile-dot' + (idx === 0 ? ' active' : '');
+        dotsEl.appendChild(dot);
+      });
+
+      // Update active dot on scroll
+      const dots = dotsEl.querySelectorAll('.mobile-dot');
+      const cards = track.querySelectorAll('.mobile-card');
+
+      track.addEventListener('scroll', () => {
+        // Find which card is most centred
+        const trackMid = track.scrollLeft + track.clientWidth / 2;
+        let closest = 0, minDist = Infinity;
+        cards.forEach((c, i) => {
+          const cardMid = c.offsetLeft + c.offsetWidth / 2;
+          const dist = Math.abs(trackMid - cardMid);
+          if (dist < minDist) { minDist = dist; closest = i; }
+        });
+        dots.forEach((d, i) => d.classList.toggle('active', i === closest));
+      }, { passive: true });
+    }
+
+    // ── Init correct mode, re-init on resize crossing breakpoint ──
+    let wasDesktop = !isMobile();
+    isMobile() ? initMobile() : initDesktop();
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const nowDesktop = !isMobile();
+        if (nowDesktop !== wasDesktop) {
+          wasDesktop = nowDesktop;
+          document.getElementById('scene').innerHTML = '';
+          document.getElementById('mobileScroll').innerHTML = '';
+          document.getElementById('mobileDots').innerHTML = '';
+          nowDesktop ? initDesktop() : initMobile();
+        }
+      }, 150);
+    });
+  </script>
+</body>
+
+</html>

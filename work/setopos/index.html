@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Setopos — DvlprStudio</title>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap&font-display=optional" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../shared/work.css"/>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- LEFT — fixed 50% panel -->
+  <div class="left">
+    <a href="../../" class="back-btn">
+      <i class="ph ph-arrow-bend-up-left"></i> back
+    </a>
+    <div class="left-content">
+      <h2 class="proj-title" data-accent="#c2ff1f">
+        Focused task management built for deep work and flow states
+      </h2>
+      <div class="proj-name-row">
+        <span class="proj-name">Setopos</span>
+        <a href="#" class="proj-link" target="_blank"><i class="ph ph-arrow-square-out"></i></a>
+      </div>
+      <div class="proj-year">2025</div>
+    </div>
+  </div>
+
+  <!-- RIGHT — scrollable 50% panel -->
+  <div class="right">
+
+    <h2>The brief</h2>
+    <p>
+      Most task managers are designed for teams and loaded with features nobody asked for — 
+      integrations, kanban boards, comment threads. They end up interrupting the very thing you're 
+      trying to do: the work.
+    </p>
+    <p>
+      Setopos was built on one idea: the best productivity tool gets out of your way. 
+      A clean daily task list, a built-in focus timer, and nothing else. 
+      No projects, no sub-tasks, no overwhelm.
+    </p>
+
+    <div class="tags">
+      <span class="tag">React</span>
+      <span class="tag">Node.js</span>
+      <span class="tag">PostgreSQL</span>
+      <span class="tag">Supabase</span>
+      <span class="tag">Vercel</span>
+      <span class="tag">SaaS</span>
+    </div>
+
+    <div class="mockup">
+      <div class="mockup-bar">
+        <div class="mockup-dot" style="background:#ff5f57"></div>
+        <div class="mockup-dot" style="background:#febc2e"></div>
+        <div class="mockup-dot" style="background:#28c840"></div>
+      </div>
+      <div class="mockup-screen">
+        <div class="mockup-screen-inner" style="color:#c2ff1f;">
+          <div style="font-size:28px;font-weight:900;margin-bottom:8px;">25:00</div>
+          <div style="opacity:.6;font-size:11px;letter-spacing:2px;">DEEP WORK SESSION</div>
+          <div style="margin-top:20px;font-size:12px;opacity:.4;">✓ Write API docs &nbsp; ✓ Review PR #42</div>
+          <div style="font-size:12px;opacity:.8;margin-top:4px;">→ Refactor auth module</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Design principles</h2>
+    <p>
+      Every UI decision was evaluated against one question: does this help the user do their work, 
+      or does it distract from it? If the answer was the latter, it didn't ship.
+    </p>
+    <p>
+      The interface defaults to a daily view. You see today's tasks and a focus timer. 
+      That's it. Completed items fade out. Incomplete items roll over at midnight.
+    </p>
+
+    <hr/>
+
+    <h2>Technical approach</h2>
+    <p>
+      Built with React on the frontend, Node.js + PostgreSQL on the backend, 
+      hosted on Vercel with Supabase for auth and real-time sync. 
+      Time-to-interactive under 1 second on a 4G connection.
+    </p>
+    <p>
+      The focus timer uses the Web Audio API to generate subtle tones at session start and end 
+      — no dependency needed, sub-3KB implementation.
+    </p>
+
+    <pre><code><span class="cm">// Web Audio focus chime — zero dependencies</span>
+<span class="kw">function</span> <span class="fn">playChime</span>(<span class="nm">freq</span> = <span class="nm">440</span>) {
+  <span class="kw">const</span> ctx = <span class="kw">new</span> <span class="fn">AudioContext</span>();
+  <span class="kw">const</span> osc = ctx.<span class="fn">createOscillator</span>();
+  <span class="kw">const</span> gain = ctx.<span class="fn">createGain</span>();
+  osc.<span class="fn">connect</span>(gain);
+  gain.<span class="fn">connect</span>(ctx.destination);
+  osc.frequency.value = <span class="nm">freq</span>;
+  gain.gain.<span class="fn">setValueAtTime</span>(<span class="nm">0.3</span>, ctx.currentTime);
+  gain.gain.<span class="fn">exponentialRampToValueAtTime</span>(<span class="nm">0.001</span>, ctx.currentTime + <span class="nm">1.5</span>);
+  osc.<span class="fn">start</span>();
+  osc.<span class="fn">stop</span>(ctx.currentTime + <span class="nm">1.5</span>);
+}</code></pre>
+    <figcaption>Focus session start/end chime — Web Audio API</figcaption>
+
+    <h2>Links</h2>
+    <ul class="link-list">
+      <li><a href="#"><i class="ph ph-globe"></i> Visit Setopos</a></li>
+      <li><a href="#"><i class="ph ph-github-logo"></i> GitHub</a></li>
+    </ul>
+
+  </div>
+</div>
+
+<script src="../../shared/work.js"></script>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+</body>
+</html>

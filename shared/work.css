@@ -1,0 +1,327 @@
+/* ── RESET & BASE ─── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  /* Prevent scrollbar appearance from shifting layout */
+  scrollbar-gutter: stable;
+}
+
+/* Pre-size Phosphor icon slots to prevent icon-swap jitter */
+.ph {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+/* ── LAYOUT: 50/50 fixed split on desktop ─── */
+.layout {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 100vh;
+  /* contain layout so children can't trigger page-level reflow */
+  contain: layout style;
+}
+
+/* ── LEFT PANEL — true fixed via position:fixed, not sticky ─── */
+.left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100vh;
+  background: #111;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 44px 36px;
+  overflow: hidden;
+  /* Prevent subpixel text shifts during GPU compositing */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Own compositor layer — no repaints from right panel scrolling */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s;
+  width: fit-content;
+}
+.back-btn:hover { color: #fff; }
+.back-btn i { font-size: 20px; }
+
+.left-content { margin-top: auto; }
+
+.proj-title {
+  /* Fixed rem — no vw units, no resize-triggered reflow jitter */
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1.06;
+  color: #c2ff1f; /* overridden per-page via data-accent */
+  margin-bottom: 24px;
+}
+
+.proj-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.proj-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+.proj-link {
+  color: rgba(255,255,255,0.55);
+  font-size: 20px;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.proj-link:hover { color: #fff; }
+
+.proj-year {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── RIGHT PANEL — scrollable, offset past fixed left ─── */
+.right {
+  grid-column: 2;
+  background: #fff;
+  /* overflow-y: scroll keeps scrollbar always present — prevents width jitter */
+  overflow-y: scroll;
+  height: 100vh;
+  padding: 72px 60px 80px 60px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+}
+.right::-webkit-scrollbar { width: 5px; }
+.right::-webkit-scrollbar-track { background: transparent; }
+.right::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+/* ── CONTENT STYLES ─── */
+.right h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111;
+  margin: 48px 0 14px;
+}
+.right h2:first-child { margin-top: 0; }
+
+.right p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.right a {
+  color: #111;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.right img {
+  width: 100%;
+  border-radius: 10px;
+  margin: 28px 0;
+  border: 1px solid #eee;
+}
+
+/* code block */
+.right pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border-radius: 10px;
+  padding: 24px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  overflow-x: auto;
+  margin: 28px 0;
+  font-family: 'Fira Code', 'JetBrains Mono', monospace;
+}
+.right pre .kw  { color: #cba6f7; }
+.right pre .fn  { color: #89b4fa; }
+.right pre .st  { color: #a6e3a1; }
+.right pre .cm  { color: #585b70; }
+.right pre .nm  { color: #fab387; }
+
+.right figcaption {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  margin-top: -20px;
+  margin-bottom: 28px;
+}
+
+/* tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 32px;
+}
+.tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1.5px solid #ddd;
+  color: #555;
+}
+
+/* links list */
+.link-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+.link-list li a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.link-list li a:hover { opacity: 0.5; }
+.link-list li a i { font-size: 20px; }
+
+/* callout block */
+.callout {
+  padding: 20px 24px;
+  border-radius: 0 10px 10px 0;
+  margin: 24px 0;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333;
+  border-left: 4px solid #c2ff1f; /* overridden per-page if needed */
+  background: #f9f9f0;
+}
+
+/* screenshot mockup */
+.mockup {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  margin: 28px 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+.mockup-bar {
+  background: #f4f4f4;
+  padding: 10px 14px;
+  display: flex;
+  gap: 7px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.mockup-dot { width: 12px; height: 12px; border-radius: 50%; }
+.mockup-screen {
+  background: #111;
+  padding: 28px;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mockup-screen-inner {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* steps */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 24px 0;
+}
+.step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.step-num {
+  font-size: 13px;
+  font-weight: 800;
+  background: #111;
+  padding: 4px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-text {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* divider */
+hr { border: none; border-top: 1px solid #eee; margin: 40px 0; }
+
+/* ── RESPONSIVE: iPad (≤1024px) & Mobile — stacked full width ─── */
+@media (max-width: 1024px) {
+  html, body { overflow: auto; }
+
+  .layout {
+    display: block; /* exit grid entirely */
+    height: auto;
+  }
+
+  .left {
+    position: relative; /* exit fixed */
+    width: 100%;
+    height: auto;
+    min-height: 300px;
+    padding: 32px 28px;
+    will-change: auto;
+    transform: none;
+  }
+
+  .proj-title {
+    font-size: 2.2rem;
+  }
+
+  .right {
+    grid-column: auto;
+    height: auto;
+    overflow-y: visible;
+    overflow-x: visible;
+    padding: 48px 28px 64px;
+    scrollbar-gutter: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .left { min-height: 260px; padding: 28px 20px; }
+  .right { padding: 40px 20px 56px; }
+  .proj-title { font-size: 1.9rem; }
+}
+
+/* ── Prevent Phosphor icon text flash before script loads ─── */
+/* Icons are <i class="ph ph-*"> — hide raw text, show once .ph-duotone class active */
+i[class*="ph-"]:not(.ph-fill):not([class*="ph-duotone"]) {
+  font-style: normal;
+  font-size: inherit;
+}

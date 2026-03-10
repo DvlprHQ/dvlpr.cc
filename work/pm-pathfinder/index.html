@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>PM Pathfinder — DvlprStudio</title>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap&font-display=optional" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../shared/work.css"/>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- LEFT — fixed 50% panel -->
+  <div class="left">
+    <a href="../../" class="back-btn">
+      <i class="ph ph-arrow-bend-up-left"></i> back
+    </a>
+    <div class="left-content">
+      <h2 class="proj-title" data-accent="#ffd166">
+        A guided decision framework for product managers navigating ambiguity
+      </h2>
+      <div class="proj-name-row">
+        <span class="proj-name">PM Pathfinder</span>
+        <a href="#" class="proj-link" target="_blank"><i class="ph ph-arrow-square-out"></i></a>
+      </div>
+      <div class="proj-year">2025</div>
+    </div>
+  </div>
+
+  <!-- RIGHT — scrollable 50% panel -->
+  <div class="right">
+
+    <h2>The brief</h2>
+    <p>
+      Product managers spend a lot of time in grey areas. Should we build this feature? 
+      Is this bug a P0 or a P2? Do we do the technically right thing or the thing users are asking for?
+    </p>
+    <p>
+      PM Pathfinder is an interactive decision tool — you answer a series of questions about your 
+      situation and it surfaces the right framework, the right questions to ask, and the right 
+      stakeholders to loop in.
+    </p>
+
+    <div class="callout" data-accent="#ffd166">
+      Not another "prioritisation matrix." It adapts to the type of decision you're actually making — 
+      scope, resourcing, technical debt, user research, and stakeholder alignment all have different paths.
+    </div>
+
+    <div class="tags">
+      <span class="tag">React</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag">Framer Motion</span>
+      <span class="tag">Vercel</span>
+      <span class="tag">Tool</span>
+    </div>
+
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-text">Describe the type of decision you're facing — build vs buy, prioritisation, scope reduction, stakeholder conflict, etc.</div>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-text">Answer 3–5 targeted questions about your constraints: timeline, team size, user impact, reversibility.</div>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-text">Get a recommended framework with a worked example, a list of questions to bring to your next meeting, and links to deeper reading.</div>
+      </div>
+    </div>
+
+    <hr/>
+
+    <h2>Technical approach</h2>
+    <p>
+      A decision tree engine at the core — each node is a question with weighted branches. 
+      Built in React with Framer Motion for transitions. 
+      The full decision tree lives in a JSON file — easy to extend without touching the UI code.
+    </p>
+    <p>
+      Zero backend. Everything runs client-side. Loads in under 600ms.
+    </p>
+
+    <h2>Links</h2>
+    <ul class="link-list">
+      <li><a href="#"><i class="ph ph-globe"></i> Try PM Pathfinder</a></li>
+      <li><a href="#"><i class="ph ph-github-logo"></i> GitHub</a></li>
+    </ul>
+
+  </div>
+</div>
+
+<script src="../../shared/work.js"></script>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+</body>
+</html>
